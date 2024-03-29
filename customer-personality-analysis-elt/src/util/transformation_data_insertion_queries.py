@@ -11,3 +11,9 @@ demographic_income_spending = """
         Avg_Spending_Gold
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
+
+customer_loyalty_spending = """
+    INSERT INTO customer_loyalty_spending (Days_Since_Enrollment,
+                                           Total_Spending)
+    VALUES (%s, %s)
+    """

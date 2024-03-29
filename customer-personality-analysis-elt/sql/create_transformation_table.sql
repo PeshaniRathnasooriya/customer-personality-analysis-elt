@@ -10,5 +10,11 @@ CREATE TABLE IF NOT EXISTS demographic_spending (
     Avg_Spending_Gold FLOAT
 );
 
+CREATE TABLE IF NOT EXISTS customer_loyalty_spending (
+    Days_Since_Enrollment INT,
+    Total_Spending FLOAT
+);
+
+
 
 

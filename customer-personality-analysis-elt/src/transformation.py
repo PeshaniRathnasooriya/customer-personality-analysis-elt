@@ -33,7 +33,7 @@ try:
     # Example transformation: Demographic Influence on Income and Spending
     # Read and execute SQL queries from external files
     execute_sql_file(cursor, (sql_dir + 'create_transformation_table.sql'))
-    file_names = ["demographic_income_spending"]
+    file_names = ["demographic_income_spending", "customer_loyalty_spending"]
     for file in file_names:
         rows = execute_sql_file(
             cursor, (sql_dir + file + '.sql'), True)
