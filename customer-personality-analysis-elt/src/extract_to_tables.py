@@ -24,9 +24,9 @@ try:
     # Create a cursor object using the cursor() method
     cursor = conn.cursor()
 
-    # Define the SQL statement to create the customer table
-    create_table_query = """
-        CREATE TABLE IF NOT EXISTS customer (
+    # Define the SQL statements to create tables
+    create_people_table_query = """
+        CREATE TABLE IF NOT EXISTS people (
             ID SERIAL PRIMARY KEY,
             Year_Birth INT,
             Education VARCHAR(50),
@@ -36,17 +36,35 @@ try:
             Teenhome INT,
             Dt_Customer DATE,
             Recency INT,
-            Complain INT,
+            Complain INT
+        )
+    """
+
+    create_product_table_query = """
+        CREATE TABLE IF NOT EXISTS product (
+            ID SERIAL PRIMARY KEY,
             MntWines FLOAT,
             MntFruits FLOAT,
             MntMeatProducts FLOAT,
             MntFishProducts FLOAT,
             MntSweetProducts FLOAT,
-            MntGoldProds FLOAT,
+            MntGoldProds FLOAT
+        )
+    """
+
+    create_place_table_query = """
+        CREATE TABLE IF NOT EXISTS place (
+            ID SERIAL PRIMARY KEY,
             NumWebPurchases INT,
             NumCatalogPurchases INT,
             NumStorePurchases INT,
-            NumWebVisitsMonth INT,
+            NumWebVisitsMonth INT
+        )
+    """
+
+    create_promotion_table_query = """
+        CREATE TABLE IF NOT EXISTS promotion (
+            ID SERIAL PRIMARY KEY,
             NumDealsPurchases INT,
             AcceptedCmp3 INT,
             AcceptedCmp4 INT,
@@ -57,30 +75,39 @@ try:
         )
     """
 
-    # Execute the SQL statement to create the customer table
-    cursor.execute(create_table_query)
+    # Execute the SQL statements to create tables
+    cursor.execute(create_people_table_query)
+    cursor.execute(create_product_table_query)
+    cursor.execute(create_place_table_query)
+    cursor.execute(create_promotion_table_query)
 
     # Open the CSV file for reading
     csv_file = 'marketing_campaign.csv'
 
-    # Define the SQL statement to insert data into the customer table
-    insert_query = """
-        INSERT INTO customer (ID, Year_Birth, Education, Marital_Status, 
-                              Income,Kidhome,Teenhome, Dt_Customer, Recency, 
-                              Complain,MntWines,MntFruits,MntMeatProducts,
-                              MntFishProducts,MntSweetProducts,MntGoldProds,NumWebPurchases,NumCatalogPurchases, 
-                              NumStorePurchases, NumWebVisitsMonth,
-                              NumDealsPurchases,AcceptedCmp3,AcceptedCmp4, 
-                              AcceptedCmp5, AcceptedCmp1,AcceptedCmp2, 
-                              Response)
-        VALUES (%s, %s, %s, %s, %s, 
-                %s,%s, %s, %s, %s,
-                %s,%s, %s, %s, 
-                %s, %s,%s,
-                %s, %s, 
-                %s, %s, %s,
-                %s, %s, %s, 
-                %s, %s)
+    # Define the SQL statements to insert data into the tables
+    insert_people_query = """
+        INSERT INTO people (ID, Year_Birth, Education, Marital_Status, Income, 
+                            Kidhome, Teenhome, Dt_Customer, Recency, Complain)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+    insert_product_query = """
+        INSERT INTO product (MntWines, MntFruits, MntMeatProducts, 
+                             MntFishProducts, MntSweetProducts, MntGoldProds)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """
+
+    insert_place_query = """
+        INSERT INTO place (NumWebPurchases, NumCatalogPurchases, 
+                           NumStorePurchases,NumWebVisitsMonth)
+        VALUES (%s, %s, %s, %s)
+    """
+
+    insert_promotion_query = """
+        INSERT INTO promotion (NumDealsPurchases, AcceptedCmp3, AcceptedCmp4, 
+                               AcceptedCmp5, AcceptedCmp1, AcceptedCmp2,
+                               Response)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
 
     # Open the CSV file and iterate over its rows to insert into the database
@@ -88,12 +115,29 @@ try:
         reader = csv.reader(file)
         next(reader)  # Skip the header row
         for row in reader:
-            print(row)  # Add this line for debugging
             try:
                 # Convert date string to datetime.date object
                 row[7] = convert_to_date(row[7])
-                # Execute the SQL command
-                cursor.execute(insert_query, row)
+                # Execute the SQL command for inserting into people table
+                cursor.execute(insert_people_query, tuple(row[:10]))
+                # Print inserted row for debugging
+                print("Inserted row into people table:", tuple(row[:10]))
+
+                # Execute the SQL command for inserting into product table
+                cursor.execute(insert_product_query, tuple(row[10:16]))
+                # Print inserted row for debugging
+                print("Inserted row into product table:", tuple(row[10:16]))
+
+                # Execute the SQL command for inserting into place table
+                cursor.execute(insert_place_query, tuple(row[16:20]))
+                # Print inserted row for debugging
+                print("Inserted row into place table:", tuple(row[16:20]))
+
+                # Execute the SQL command for inserting into promotion table
+                cursor.execute(insert_promotion_query, tuple(row[20:]))
+                # Print inserted row for debugging
+                print("Inserted row into promotion table:", tuple(row[20:]))
+
             except Exception as e:
                 print("Error inserting row:", e)
                 conn.rollback()  # Rollback the transaction in case of an error
@@ -101,7 +145,7 @@ try:
     # Commit the transaction
     conn.commit()
 
-    print("Data has been successfully loaded into the customer table.")
+    print("Data has been successfully loaded into all tables.")
 
 except psycopg.Error as e:
     print("Error connecting to PostgreSQL:", e)
