@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "customer-personality-analysis-elt"
+version = "0.1.0"
+description = ""
+authors = ["PeshaniRathnasooriya <peshaniumodhya@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+psycopg2-binary = "^2.9.9"
+pandas = "^2.2.1"
+numpy = "^1.21.5"
+psycopg = {extras = ["binary"], version = "^3.1.18"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
