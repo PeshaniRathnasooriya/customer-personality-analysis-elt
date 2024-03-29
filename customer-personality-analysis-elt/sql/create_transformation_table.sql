@@ -15,6 +15,15 @@ CREATE TABLE IF NOT EXISTS customer_loyalty_spending (
     Total_Spending FLOAT
 );
 
+CREATE TABLE IF NOT EXISTS complaints_spending_campaign_response (
+    Promotion_Campaign VARCHAR(20),
+    Age_Group VARCHAR(20),
+    Education VARCHAR(50),
+    Total_Customers INT,
+    Accepted_Customers INT,
+    Acceptance_Rate FLOAT
+);
+
 
 
 

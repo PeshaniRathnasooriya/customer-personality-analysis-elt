@@ -17,3 +17,9 @@ customer_loyalty_spending = """
                                            Total_Spending)
     VALUES (%s, %s)
     """
+    
+complaints_spending_campaign_response = """
+    INSERT INTO complaints_spending_campaign_response (Promotion_Campaign, 
+    Age_Group, Education, Total_Customers, Accepted_Customers, Acceptance_Rate)
+    VALUES (%s, %s, %s, %s, %s, %s)
+    """
